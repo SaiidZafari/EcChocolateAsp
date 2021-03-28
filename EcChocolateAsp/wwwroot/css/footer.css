@@ -1,0 +1,39 @@
+﻿.footerCont .footerDiv .services {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+    .footerCont .footerDiv .services .service {
+        min-width: 260px;
+        margin: 1% auto;
+    }
+
+.footerCont .services .service div:first-child {
+    margin-top: 1%;
+}
+
+.footerCont .services .service div {
+    height: 60px;
+    justify-items: center;
+}
+
+
+.footerCont .services .service img {
+    width: 30%;
+}
+
+.footerCont .services .service ul li:first-child {
+    color: black;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.footerCont .service ul {
+    padding-left: 30%;
+}
+
+.freakyF {
+    width: 100%;
+    text-align: center;
+}
