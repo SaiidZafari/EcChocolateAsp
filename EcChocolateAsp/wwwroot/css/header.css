@@ -76,3 +76,15 @@ header .navbar {
     .divEye img {
         width: 100%;
     }
+    .cartImg{
+        width:40%;
+        float:right
+    }
+
+.cartText {
+    padding: 7% 0% 1% 2%;
+    width: 150px;
+    position: relative;
+    top: 0%;
+    left: 80%;
+}

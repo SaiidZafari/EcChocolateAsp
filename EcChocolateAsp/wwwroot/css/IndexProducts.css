@@ -1,0 +1,16 @@
+﻿#divMF{
+    margin:2% 0;
+    width:100%;
+
+    display:flex;
+    
+    align-content:space-between;
+    text-align:center;
+    font-size: 1.5em;
+}
+.figFrame {
+    border: 2px solid black;
+}
+.figFrame img{
+    width: 100%;
+}

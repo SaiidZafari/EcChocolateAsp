@@ -16,5 +16,7 @@ namespace EcChocolateAsp.Models
         DbSet<Product> Products { get; set; }
 
         DbSet<Category> Categories { get; set; }
+
+        DbSet<Reservation> Reservations  { get; set; }
     }
 }
