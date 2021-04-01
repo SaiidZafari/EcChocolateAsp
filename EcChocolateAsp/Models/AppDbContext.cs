@@ -13,10 +13,12 @@ namespace EcChocolateAsp.Models
 
         }
 
-        DbSet<Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
-        DbSet<Reservation> Reservations  { get; set; }
+        public DbSet<Reservation> Reservations  { get; set; }
+
+        //public DbSet<ImageUrl> ImageUrls { get; set; }
     }
 }

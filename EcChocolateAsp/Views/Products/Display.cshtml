@@ -1,0 +1,27 @@
+﻿@model EcChocolateAsp.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>
+    @Model.Name
+</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @Model.Description
+        </div>
+        <div class="col">
+            @Model.Price
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @foreach (var item in Model.Images)
+            {
+                item.Url.ToString();
+            }
+        </div>
+    </div>
+</div>

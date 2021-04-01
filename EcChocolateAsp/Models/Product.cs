@@ -21,6 +21,12 @@ namespace EcChocolateAsp.Models
             Images = new List<ImageUrl> { new ImageUrl(imageUrl) };
         }
 
+        public Product(string name, decimal price, string description, ICollection<ImageUrl> images)
+            : this(name, price, description)
+        {
+            Images = images;
+        }
+
         public Product(string name, decimal price, string description)
         {
             Name = name;
