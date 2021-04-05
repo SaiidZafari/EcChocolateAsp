@@ -18,10 +18,9 @@ namespace EcChocolateAsp.Models
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Reservation> Reservations  { get; set; }
-<<<<<<< HEAD
+
 
         //public DbSet<ImageUrl> ImageUrls { get; set; }
-=======
->>>>>>> szDevelop
+
     }
 }
