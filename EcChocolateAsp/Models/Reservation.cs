@@ -16,7 +16,6 @@ namespace EcChocolateAsp.Models
         public string FullName { get; set; }
 
         [Required]
-        [MaxLength(50)]
         public int Phone { get; set; }
 
         [Required]
