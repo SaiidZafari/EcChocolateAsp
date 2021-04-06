@@ -51,12 +51,15 @@ namespace EcChocolateAsp
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                   name: "area",
+                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapAreaControllerRoute(
-                    name: "Admin",
-                    areaName: "Admin",
-                    pattern: "Admin/{controller=Products}/{action=Index}/{id?}"
-                    );
+                //endpoints.MapAreaControllerRoute(
+                //    name: "Admin",
+                //    areaName: "Admin",
+                //    pattern: "Admin/{controller=Products}/{action=Index}/{id?}"
+                //    );
 
 
                 endpoints.MapControllerRoute(
