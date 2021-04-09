@@ -111,7 +111,7 @@ namespace EcChocolateAsp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = reservation.Id });
             }
             return View(reservation);
         }

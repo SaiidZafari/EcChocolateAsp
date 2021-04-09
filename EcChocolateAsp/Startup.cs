@@ -2,6 +2,7 @@ using EcChocolateAsp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,13 @@ namespace EcChocolateAsp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+            
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
+
+            //services.Configure<IdentityUser, IdentityRole>().AddEEntityFrameworkStoresaAppdbContext();
+
+
             services.AddMvc().AddRazorRuntimeCompilation();
         }
 
@@ -48,6 +56,7 @@ namespace EcChocolateAsp
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
