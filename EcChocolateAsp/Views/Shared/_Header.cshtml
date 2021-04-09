@@ -1,4 +1,8 @@
-﻿<div class="container headerAll">
+﻿@inject SignInManager<IdentityUser> signInManager;
+
+
+
+<div class="container headerAll">
 
     <div class="leftHeader">
         <a class="navbar-brand logoLink" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/Logo.png" class="logo modal-dialog" /></a>
@@ -16,10 +20,16 @@
     </div>
     <div class="rightHeader">
         <div class="loginDiv">
-            <a asp-area="" asp-controller="" asp-action="">
-                <img src="/images/LogIn.png" alt="Alternate Text" />
-                
-            </a>
+            @if (signInManager.IsSignedIn(User))
+            {
+                <form method="post" asp-controller="Account" asp-action="Logout">
+                    <button class="border-white"><img src="/images/Logout.png" alt="Alternate Text" /></button>
+                </form>
+            }
+            else
+            {
+                <a asp-area="" asp-controller="Account" asp-action="Login"><img src="/images/LogIn.png" alt="Alternate Text" /></a>
+            }
         </div>
         <div class="cartDiv">
             <a asp-area="" asp-controller="" asp-action="">
