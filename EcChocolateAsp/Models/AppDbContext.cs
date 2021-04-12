@@ -19,6 +19,8 @@ namespace EcChocolateAsp.Models
 
         public DbSet<Reservation> Reservations  { get; set; }
 
+
         //public DbSet<ImageUrl> ImageUrls { get; set; }
+
     }
 }
