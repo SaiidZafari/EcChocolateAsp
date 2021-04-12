@@ -2,6 +2,7 @@
 using EcChocolateAsp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace EcChocolateAsp.Controllers
         [HttpPost]
         public IActionResult AddToFavorite(int productId)
         {
-            var product = context.Products.First(x => x.Id == productId);
+            var product = context.Products.Include(x => x.Images).First(x => x.Id == productId);
 
             //After session get is terminated , favorite var is setted as new Favorite object.
             var favorite = HttpContext.Session.Get<Favorite>("Favorite") ?? new Favorite();
