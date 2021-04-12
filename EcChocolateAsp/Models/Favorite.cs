@@ -20,7 +20,8 @@ namespace EcChocolateAsp.Models
                 {
                     Id = product.Id,
                     Name = product.Name,
-                    Price = product.Price
+                    Price = product.Price,
+                    Image = product.Image
                 });
             }
         }
@@ -32,6 +33,7 @@ namespace EcChocolateAsp.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public string Image { get; set; }
     }
 
 }
