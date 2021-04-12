@@ -98,9 +98,16 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             }
 
             var product = await context.Products.FindAsync(id);
+            context.Entry(product).Collection(x => x.Images).Load();
             if (product == null)
             {
                 return NotFound();
+            }
+
+            var images = "";
+            foreach (var item in product.Images)
+            {
+                images += $"{item.Url}\r\n";
             }
 
             var viewModel = new EditProductViewModel
@@ -108,7 +115,8 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
-                Description = product.Description
+                Description = product.Description,
+                Images = images
             };
 
             return View(viewModel);
@@ -132,11 +140,16 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 {
                     var images = new List<ImageUrl>();
 
-                    var product = await context.Products.FindAsync(id);
-                    await context.Entry(product).Collection(x => x.Images).LoadAsync();
+                    foreach (var item in viewModel.Images.Split("\r\n"))
+                    {
+                        images.Add(new ImageUrl(item));
+                    }
 
-                    var newProduct = new Product(viewModel.Id, viewModel.Name, viewModel.Price, viewModel.Description, product.Images);
-                    context.Update(newProduct);
+                    //var product = await context.Products.FindAsync(id);
+                    //await context.Entry(product).Collection(x => x.Images).LoadAsync();
+
+                    var product = new Product(viewModel.Id, viewModel.Name, viewModel.Price, viewModel.Description, images);
+                    context.Update(product);
                     await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -191,6 +204,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             return View();
         }
 
+        //this dosen't work
         [HttpPost]
         [Route("Admin/Products/Import")]
         public IActionResult Import(IFormFile file)

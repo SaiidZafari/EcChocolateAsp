@@ -1,0 +1,52 @@
+﻿@model EcChocolateAsp.Models.ProductIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="jumbotron" style="background-color:#faf0e6;">
+    <h1 class="display-4">Newly added products!</h1>
+    <hr class="my-4">
+    <div class="row" style="background-color:#faf0e6; border-radius: 10px; padding-top:10px; padding-bottom:10px;">
+        <div class="col-md-4">
+            <img src="~/images/@Model.PromotedProduct.Image" alt="" style="border-radius: 5px;
+        -webkit-box-shadow: 0px 0px 12px -4px #000000;
+        box-shadow: 0px 0px 12px -4px #000000;width : 100%;height : 100%;">
+        </div>
+
+        <div class="col-md-8">
+            <h2>@Model.PromotedProduct.Name</h2>
+            <p> Description : @Model.PromotedProduct.Description</p>
+            <p>Price : @Model.PromotedProduct.Price</p>
+        </div>
+    </div>
+</div>
+
+
+<h1>All our products</h1>
+<div class="container d-flex justify-content-center mt-50 mb-50">
+    <div class="row">
+        @foreach (var product in Model.Products)
+        {
+            <a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">
+                <div class="col-md-4 mt-2">
+                    <div class="card">
+                        <form asp-route="AddToFavorite" method="post">
+                            <div class="card-body">
+                                <div class="card-img-actions"> <img src="~/images/@product.Image " class="card-img img-fluid" width="96" height="350" alt=""> </div>
+                            </div>
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <div class="card-body bg-light text-center">
+                                <div class="mb-2">
+                                    <h6 class="font-weight-semibold mb-2"> <a href="#" class="text-default mb-2" data-abc="true">@product.Name</a> </h6>
+                                </div>
+                                <h3 class="mb-0 font-weight-semibold">@product.Price</h3>
+                                <button class="btn bg-cart"><i class="fa fa-star mr-2"></i> Add to favorite</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

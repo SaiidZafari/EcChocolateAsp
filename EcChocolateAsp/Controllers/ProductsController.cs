@@ -18,6 +18,22 @@ namespace EcChocolateAsp.Controllers
             this.context = context;
         }
 
+        
+
+        public async Task<IActionResult> Index()
+        {
+            var products = await context.Products.Include(x => x.Images).ToListAsync();
+
+
+            var viewModel = new ProductIndexViewModel {
+                Products = products,
+                PromotedProduct = products.First(x => x.Name == "Classic Ice Cream Cake")
+            };
+
+
+            return View(viewModel);
+        }
+
         [Route("products/{urlSlug}")]
         public IActionResult Display(string urlSlug)
         {

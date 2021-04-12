@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Showing products by category</h1>
+<div class="container d-flex justify-content-center mt-50 mb-50">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">
+                <div class="col-md-4 mt-2">
+                    <div class="card">
+                        <form asp-route="AddToFavorite" method="post">
+                            <div class="card-body">
+                                <div class="card-img-actions"> <img src="~/images/@String.Concat(product.Name.Replace(" ", "").ToLower(), ".jpg") " class="card-img img-fluid" width="96" height="350" alt=""> </div>
+                            </div>
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <div class="card-body bg-light text-center">
+                                <div class="mb-2">
+                                    <h6 class="font-weight-semibold mb-2"> <a href="#" class="text-default mb-2" data-abc="true">@product.Name</a> </h6>
+                                </div>
+                                <h3 class="mb-0 font-weight-semibold">@product.Price</h3>
+                                <button class="btn bg-cart"><i class="fa fa-star mr-2"></i> Add to favorite</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
