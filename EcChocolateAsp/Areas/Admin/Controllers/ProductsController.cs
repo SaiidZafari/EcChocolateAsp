@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using EcChocolateAsp.Areas.Admin.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcChocolateAsp.Areas.Admin.Controllers
 {

@@ -4,14 +4,16 @@ using EcChocolateAsp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcChocolateAsp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210408183922_AddRegiter")]
+    partial class AddRegiter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,11 +339,9 @@ namespace EcChocolateAsp.Migrations
 
             modelBuilder.Entity("EcChocolateAsp.Models.Product", b =>
                 {
-                    b.HasOne("EcChocolateAsp.Models.Category", "Category")
+                    b.HasOne("EcChocolateAsp.Models.Category", null)
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
