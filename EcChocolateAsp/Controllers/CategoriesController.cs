@@ -8,29 +8,27 @@ using System.Threading.Tasks;
 
 namespace EcChocolateAsp.Controllers
 {
-    public class ProductsController : Controller
+    public class CategoriesController : Controller
     {
-
         private readonly AppDbContext context;
 
-        public ProductsController (AppDbContext context)
+        public CategoriesController(AppDbContext context)
         {
             this.context = context;
         }
 
-        
-
         public async Task<IActionResult> Index()
         {
-            return View(await context.Products.ToListAsync());
+            return View(await context.Categories.ToListAsync());
         }
 
-        [Route("products/{urlSlug}")]
+        [Route("categories/{urlSlug}")]
         public IActionResult Display(string urlSlug)
         {
-            var product = context.Products.FirstOrDefault(product => NameAsUrlSlug(product.Name) == urlSlug);
+            var categoryId = urlSlug.Split('-').First();
+            var products = context.Products.Where(product => product.Category.Id == int.Parse(categoryId)).ToList();
 
-            return View(product);
+            return View(products);
         }
 
         private string NameAsUrlSlug(string name)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EcChocolateAsp.Models
 {
@@ -15,11 +12,13 @@ namespace EcChocolateAsp.Models
             Images = images;
         }
 
-        public Product(string name, decimal price, string description, string imageUrl)
-            : this(name, price, description)
-        {
-            Images = new List<ImageUrl> { new ImageUrl(imageUrl) };
-        }
+        
+        //public Product(string name, decimal price, string description, string imageUrl)
+        //    : this(name, price, description)
+        //{
+        //    Images = new List<ImageUrl> { new ImageUrl(imageUrl) };
+        //}
+        
 
         public Product(string name, decimal price, string description, ICollection<ImageUrl> images)
             : this(name, price, description)
@@ -27,25 +26,23 @@ namespace EcChocolateAsp.Models
             Images = images;
         }
 
+        
         public Product(string name, decimal price, string description)
         {
             Name = name;
             Price = price;
             Description = description;
         }
+        
 
-
+      
+      
         public int Id { get; protected set; }
 
         public string Name { get; protected set; }
 
-        // We have to discuss this
-        // can products be in multiple categories? (many-to-many)
-        // YES:
-        //public IEnumerable<Category> Categories { get; protected set; } = new List<Category>();
-        // or
-        // NO:
-        //public Category Category { get; protected set; }
+        
+        public Category Category { get; protected set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; protected set; }
@@ -54,6 +51,9 @@ namespace EcChocolateAsp.Models
 
         public ICollection<ImageUrl> Images { get; protected set; } = new List<ImageUrl>();
 
+
+        // It's easier to upload images on this website https://imgbb.com/ and add an ImageUrl in Products
+        
 
         // We cound implement it this way, not sure if we should
         //public string Image_path_desktop { get => (Images.Count > 0 ? Images[0] : ""); }

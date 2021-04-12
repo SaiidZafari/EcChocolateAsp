@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Favorite Page";
+}
+
+<h1>Your Favorites</h1>
+    <div class="row">
+        @foreach (var product in Model.Items)
+        {
+            <a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">
+                <div class="col-md-4 mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-img-actions"> <img src="~/images/@String.Concat(product.Name.Replace(" ", "").ToLower(), ".jpg") " class="card-img img-fluid" width="96" height="350" alt=""> </div>
+                        </div>
+                        <div class="card-body bg-light text-center">
+                            <div class="mb-2">
+                                <h6 class="font-weight-semibold mb-2"> <a href="#" class="text-default mb-2" data-abc="true">@product.Name</a> </h6>
+                            </div>
+                            <h3 class="mb-0 font-weight-semibold">@product.Price</h3>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>

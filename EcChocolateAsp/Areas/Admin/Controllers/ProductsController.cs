@@ -157,6 +157,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             return View();
         }
 
+        //this dosen't work
         [HttpPost]
         [Route("Admin/Products/Import")]
         public IActionResult Import(IFormFile file)
