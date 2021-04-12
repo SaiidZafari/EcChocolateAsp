@@ -59,15 +59,34 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description")] Product product)
+        public async Task<IActionResult> Create(CreateProductViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                context.Add(product);
+                Product newProduct = null;
+                if (viewModel.Images.Count == 0)
+                {
+                    newProduct = new Product(viewModel.Name, viewModel.Price, viewModel.Description);
+                }
+                else if (viewModel.Images.Count == 1)
+                {
+                    newProduct = new Product(viewModel.Name, viewModel.Price, viewModel.Description, viewModel.Images.First());
+                }
+                else
+                {
+                    var images = new List<ImageUrl>();
+                    foreach (var url in viewModel.Images)
+                    {
+                        images.Add(new ImageUrl(url));
+                    }
+
+                    newProduct = new Product(viewModel.Name, viewModel.Price, viewModel.Description, images);
+                }
+                context.Add(newProduct);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(viewModel);
         }
 
         // GET: Admin/Products/Edit/5
@@ -83,7 +102,16 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+
+            var viewModel = new EditProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description
+            };
+
+            return View(viewModel);
         }
 
         // POST: Admin/Products/Edit/5
@@ -91,9 +119,9 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description")] Product product)
+        public async Task<IActionResult> Edit(int id, EditProductViewModel viewModel)
         {
-            if (id != product.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -102,12 +130,18 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             {
                 try
                 {
-                    context.Update(product);
+                    var images = new List<ImageUrl>();
+
+                    var product = await context.Products.FindAsync(id);
+                    await context.Entry(product).Collection(x => x.Images).LoadAsync();
+
+                    var newProduct = new Product(viewModel.Id, viewModel.Name, viewModel.Price, viewModel.Description, product.Images);
+                    context.Update(newProduct);
                     await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ProductExists(viewModel.Id))
                     {
                         return NotFound();
                     }
@@ -118,7 +152,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(viewModel);
         }
 
         // GET: Admin/Products/Delete/5
@@ -190,7 +224,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 {
                     images.Add(new ImageUrl(item));
                 }
-                if(Ids.Contains(productItem.Id))
+                if (Ids.Contains(productItem.Id))
                 {
 
                     context.Update(new Product(productItem.Id, productItem.Name, productItem.Price, productItem.Description, images));
@@ -209,6 +243,87 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             return RedirectToRoute("adminProducts");
             //return RedirectToAction("index", "products");
         }
+
+        public IActionResult Images(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = context.Products
+                .FirstOrDefault(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            context.Entry(product).Collection(x => x.Images).Load();
+
+            string textAreaData = "";
+
+            foreach (var imageUrl in product.Images)
+            {
+                textAreaData += $"{imageUrl.Url}\r\n";
+            }
+
+            var viewModel = new ProductImagesViewModel
+            {
+                Id = product.Id,
+                TextAreaData = textAreaData
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Images(int id, ProductImagesViewModel viewModel)
+        {
+            if (id != viewModel.Id)
+            {
+                return NotFound();
+            }
+
+            var product = context.Products.Include(x => x.Images)
+                .FirstOrDefault(m => m.Id == id);
+
+            var images = new List<ImageUrl>();
+
+            foreach (var line in viewModel.TextAreaData.Split("\r\n"))
+            {
+                var image = product.Images.FirstOrDefault(x => x.Url == line);
+                if (image == null)
+                {
+                    images.Add(new ImageUrl(line));
+                }
+                else
+                {
+                    images.Add(image);
+                }
+            }
+
+            var updatedProduct = new Product(product.Id, product.Name, product.Price, product.Description, images);
+
+            try
+            {
+                context.Update(updatedProduct);
+                context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if(!ProductExists(updatedProduct.Id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return RedirectToRoute("adminProducts");
+        }
+
+
+
+
 
 
         private bool ProductExists(int id)

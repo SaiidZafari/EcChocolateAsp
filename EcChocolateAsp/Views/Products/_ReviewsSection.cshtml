@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Review>
+
+<div class="row m-2 border p-2">
+    @foreach (var review in Model)
+    {
+        <div class="row container m-1">
+            @* Review Head (Title, Score, Name) *@
+            <div class="row border container p-0 mx-1 py-1 bg-light">
+                <div class="col-9 col-sm-10 col-md-11">
+                    <div class="">
+                        @review.Title
+                    </div>
+                    <div class="small pl-2">
+                        By: @review.UserName
+                    </div>
+                </div>
+                <div class="col-3 col-sm-2 col-md-1 h3">
+                    @review.Score/5
+                </div>
+            </div>
+            <div class="row p-3 w-100 border border-top-0 mx-1 bg-white">
+                @* Review Body *@
+                @review.Body
+            </div>
+        </div>
+    }
+</div>

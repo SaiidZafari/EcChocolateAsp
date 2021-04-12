@@ -21,14 +21,27 @@ namespace EcChocolateAsp.Controllers
         [Route("products/{urlSlug}")]
         public IActionResult Display(string urlSlug)
         {
-            var product = context.Products.Include(x => x.Images).FirstOrDefault(product => NameAsUrlSlug(product.Name) == urlSlug);
+            var product = context.Products.Include(x => x.Images).ToList().FirstOrDefault(product => NameAsUrlSlug(product.Name) == urlSlug);
 
-            return View(product);
+
+            // Load reviews from database
+            //var reviews = context.Reviews.Include(x => x.Product).ToList().FirstOrDefault(review => review.Product == product);
+            var reviews = new List<Review>{
+                new Review(product, "test user", "Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate numquam atque minima pariatur corporis sequi.", 4),
+                new Review(product, "test user2", "Lorem ipsum dolor sit amet.", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum deleniti impedit necessitatibus saepe consequatur. Quae, quam vel velit expedita perspiciatis temporibus ullam totam ea veniam beatae ipsa corrupti minus nulla sint fugit reprehenderit.", 4)
+            };
+
+            var viewModel = new ProductsDisplayViewModel { 
+                Product = product, 
+                Reviews = reviews 
+            };
+
+            return View(viewModel);
         }
 
         private string NameAsUrlSlug(string name)
         {
-            return name.Trim().Replace(" ", "+").ToLower();
+            return name.Trim().Replace("-","").Replace(" ", "-").ToLower();
         }
     }
 }

@@ -1,27 +1,45 @@
-﻿@model EcChocolateAsp.Models.Product
+﻿@model EcChocolateAsp.Models.ProductsDisplayViewModel
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Product.Name;
 }
 
-<h1>
-    @Model.Name
-</h1>
 <div class="container">
+    @*<div class="row">
+            <h1>
+                @Model.Product.Name
+            </h1>
+        </div>*@
     <div class="row">
-        <div class="col">
-            @Model.Description
-        </div>
-        <div class="col">
-            @Model.Price
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            @foreach (var item in Model.Images)
+        <div class="col-12 col-md-8">
+            @foreach (var item in Model.Product.Images)
             {
-                item.Url.ToString();
+                <img src="/images/@item.Url.ToString()" alt="" />
             }
         </div>
+        <div class="col-12 col-md-4">
+            <form action="/" method="post" class="form-group border bg-light p-2">
+                <legend>
+                    @Model.Product.Name
+                </legend>
+                @Model.Product.Price SEK
+                <button class="btn-primary d-block">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col border px-0">
+            <div class="row mx-0 mt-0 h5 bg-light border-bottom">
+                Description:
+            </div>
+            <div class="row m-1 px-1">
+                @Model.Product.Description
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <partial name="_ReviewsSection" for="Reviews" />
     </div>
 </div>
+
+

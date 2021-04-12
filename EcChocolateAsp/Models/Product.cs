@@ -37,21 +37,26 @@ namespace EcChocolateAsp.Models
 
         public int Id { get; protected set; }
 
+        /// <summary>
+        /// Name of the product
+        /// </summary>
         public string Name { get; protected set; }
 
-        // We have to discuss this
-        // can products be in multiple categories? (many-to-many)
-        // YES:
-        //public IEnumerable<Category> Categories { get; protected set; } = new List<Category>();
-        // or
-        // NO:
         //public Category Category { get; protected set; }
-
+        /// <summary>
+        /// Price of the product in SEK
+        /// </summary>
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; protected set; }
 
+        /// <summary>
+        /// Description of the product
+        /// </summary>
         public string Description { get; protected set; }
 
+        /// <summary>
+        /// A collection of image names, need to be prefixed by /images/ when adding a path (for legacy reasons)
+        /// </summary>
         public ICollection<ImageUrl> Images { get; protected set; } = new List<ImageUrl>();
 
 
