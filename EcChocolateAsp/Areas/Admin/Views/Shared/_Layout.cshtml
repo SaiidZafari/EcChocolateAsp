@@ -36,7 +36,10 @@
 
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="#">Sign out</a>
+                    <form method="post" asp-area="Home" asp-controller="Account" asp-action="Logout">
+                        <button class="border-white">Sign out</button>
+                    </form>
+                    @*<a class="nav-link" href="#">Sign out</a>*@
                 </li>
             </ul>
         </section>
@@ -78,6 +81,20 @@
                                 <a class="nav-link" asp-controller="Reservations" asp-action="Create">
                                     <span data-feather="file-plus"></span>
                                     Create New
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav flex-column border-top mt-2">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Index">
+                                    <span data-feather="users"></span>
+                                    Register List
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">
+                                    <span data-feather="user-plus"></span>
+                                    Register New user
                                 </a>
                             </li>
                         </ul>
