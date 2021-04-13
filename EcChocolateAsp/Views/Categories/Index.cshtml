@@ -9,22 +9,12 @@
 <div class="list-group">
     @foreach (var category in Model)
     {
-        @*<a href="/categories/@category.Id-@category.Name" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">List group item heading</h5>
-                <small>3 days ago</small>
-            </div>
-            <p class="mb-1">@category.Name</p>
-            <small>Donec id elit non mi porta.</small>
-        </a>*@
+       
 
-    <a href="/categories/@category.Id-@category.Name" class="list-group-item list-group-item-action flex-column align-items-start" style="background-color: #F1F1F1">
-        
-        @*<img src="~/images/juice.jpg" alt="" style="border-radius: 5px;
-        -webkit-box-shadow: 0px 0px 12px -4px #000000;
-        box-shadow: 0px 0px 12px -4px #000000;">*@
-        <p class="mb-1">@category.Name</p>
-        <img src="~/images/@String.Concat(category.Name.Replace(" ", "").ToLower(), "category.jpg") " alt="Alternate Text" style="width:100%; height:250px; @*opacity:0.8*@"/>
-    </a>
+        <a href="/categories/@category.Id-@category.Name" class="list-group-item list-group-item-action flex-column align-items-start" style="background-color: #F1F1F1">
+       
+            <p class="mb-1">@category.Name</p>
+            <img src="~/images/@String.Concat(category.Name.Replace(" ", "").ToLower(), "category.jpg") " alt="Alternate Text" style="width:100%; height:250px;"/>
+        </a>
     }
 </div>
