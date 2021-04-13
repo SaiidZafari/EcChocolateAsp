@@ -14,7 +14,7 @@
                     <div class="card">
                         <form asp-route="AddToFavorite" method="post">
                             <div class="card-body">
-                                <div class="card-img-actions"> <img src="~/images/@String.Concat(product.Name.Replace(" ", "").ToLower(), ".jpg") " class="card-img img-fluid" width="96" height="350" alt=""> </div>
+                                <div class="card-img-actions"> <img src="~/images/@product.Image" class="card-img img-fluid" width="96" height="350" alt=""> </div>
                             </div>
                             <input type="hidden" name="productId" value="@product.Id" />
                             <div class="card-body bg-light text-center">

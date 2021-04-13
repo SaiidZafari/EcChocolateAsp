@@ -1,4 +1,5 @@
-﻿using EcChocolateAsp.Models;
+﻿using EcChocolateAsp.Extensions;
+using EcChocolateAsp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,7 +38,7 @@ namespace EcChocolateAsp.Controllers
         [Route("products/{urlSlug}")]
         public IActionResult Display(string urlSlug)
         {
-            var product = context.Products.Include(x => x.Images).ToList().FirstOrDefault(product => NameAsUrlSlug(product.Name) == urlSlug);
+            var product = context.Products.Include(x => x.Images).ToList().FirstOrDefault(product => product.Name.Slugify() == urlSlug);
 
 
             // Load reviews from database
@@ -53,11 +54,6 @@ namespace EcChocolateAsp.Controllers
             };
 
             return View(viewModel);
-        }
-
-        private string NameAsUrlSlug(string name)
-        {
-            return name.Trim().Replace("-","").Replace(" ", "-").ToLower();
         }
     }
 }

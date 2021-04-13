@@ -108,7 +108,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             var images = "";
             foreach (var item in product.Images)
             {
-                images += $"{item.Url}\r\n";
+                images += $"{item.Id}|{item.Url}\r\n";
             }
 
             var viewModel = new EditProductViewModel
@@ -143,7 +143,8 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
 
                     foreach (var item in viewModel.Images.Split("\r\n"))
                     {
-                        images.Add(new ImageUrl(item));
+                        if (item != "")
+                            images.Add(new ImageUrl(int.Parse(item.Split("|")[0]), item.Split("|")[1]));
                     }
 
                     //var product = await context.Products.FindAsync(id);
@@ -222,6 +223,8 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
 
             List<ImportProductModel> productItems = null;
 
+            var categories = context.Categories.ToList();
+
             try
             {
                 productItems = JsonConvert.DeserializeObject<List<ImportProductModel>>(content);
@@ -234,6 +237,12 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
 
             foreach (var productItem in productItems)
             {
+                if (categories.FirstOrDefault(x => x.Name == productItem.Category) == null)
+                {
+                    context.Add(new Category(productItem.Category));
+                    context.SaveChanges();
+                    categories = context.Categories.ToList();
+                }
                 var images = new List<ImageUrl>();
                 foreach (var item in productItem.Images)
                 {
@@ -242,12 +251,12 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 if (Ids.Contains(productItem.Id))
                 {
 
-                    context.Update(new Product(productItem.Id, productItem.Name, productItem.Price, productItem.Description, images));
+                    context.Update(new Product(productItem.Id, productItem.Name, productItem.Price, productItem.Description, images, categories.First(x => x.Name == productItem.Category)));
                 }
                 else
                 {
 
-                    context.Add(new Product(productItem.Name, productItem.Price, productItem.Description, images));
+                    context.Add(new Product(productItem.Name, productItem.Price, productItem.Description, images, categories.First(x => x.Name == productItem.Category)));
                 }
 
             }
@@ -294,7 +303,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Images(int id, ProductImagesViewModel viewModel)
         {
-            if (id != viewModel.Id)
+            if (id != viewModel.Id || !ProductExists(id))
             {
                 return NotFound();
             }
@@ -302,31 +311,44 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             var product = context.Products.Include(x => x.Images)
                 .FirstOrDefault(m => m.Id == id);
 
-            var images = new List<ImageUrl>();
+            //context.Entry(product).State = EntityState.Detached;
+
+            var oldImages = new List<ImageUrl>();
+            foreach (var item in product.Images)
+            {
+                oldImages.Add(item);
+            }
 
             foreach (var line in viewModel.TextAreaData.Split("\r\n"))
             {
                 var image = product.Images.FirstOrDefault(x => x.Url == line);
                 if (image == null)
                 {
-                    images.Add(new ImageUrl(line));
+                    if (line != "")
+                        product.Images.Add(new ImageUrl(line));
                 }
                 else
                 {
-                    images.Add(image);
+                    oldImages.Remove(image);
                 }
             }
 
-            var updatedProduct = new Product(product.Id, product.Name, product.Price, product.Description, images);
+            foreach (var item in oldImages)
+            {
+                product.Images.Remove(item);
+            }
+
+            //var updatedProduct = new Product(product.Id, product.Name, product.Price, product.Description, images);
+            //product = new Product(product.Id, product.Name, product.Price, product.Description, images, product.Category);
 
             try
             {
-                context.Update(updatedProduct);
+                context.Update(product);
                 context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if(!ProductExists(updatedProduct.Id))
+                if (!ProductExists(product.Id))
                 {
                     return NotFound();
                 }

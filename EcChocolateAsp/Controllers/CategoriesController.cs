@@ -26,14 +26,9 @@ namespace EcChocolateAsp.Controllers
         public IActionResult Display(string urlSlug)
         {
             var categoryId = urlSlug.Split('-').First();
-            var products = context.Products.Where(product => product.Category.Id == int.Parse(categoryId)).ToList();
+            var products = context.Products.Where(product => product.Category.Id == int.Parse(categoryId)).Include(x => x.Images).ToList();
 
             return View(products);
-        }
-
-        private string NameAsUrlSlug(string name)
-        {
-            return name.Trim().Replace(" ", "+").ToLower();
         }
     }
 }
