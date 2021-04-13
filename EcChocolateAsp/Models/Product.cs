@@ -7,7 +7,13 @@ namespace EcChocolateAsp.Models
     public class Product
     {
         public Product(Product product)
-            :this(product.Id, product.Name, product.Price, product.Description, product.Images, product.Category){}
+            :this(product.Id, product.Name, product.Price, product.Description, product.Images, product.Category){ }
+
+        public Product(int id, string name, decimal price, string description, ICollection<ImageUrl> images, Category category, ICollection<Review> reviews)
+            : this(id, name, price, description, images, category)
+        {
+            Reviews = reviews;
+        }
 
         public Product(int id, string name, decimal price, string description, ICollection<ImageUrl> images, Category category)
             : this(id, name, price, description, images)
@@ -61,6 +67,8 @@ namespace EcChocolateAsp.Models
         public string Description { get; protected set; }
         
         public ICollection<ImageUrl> Images { get; protected set; } = new List<ImageUrl>();
+
+        public ICollection<Review> Reviews { get; protected set; } = new List<Review>();
 
         public string Image { get => (Images.Count > 0 ? Images.First().Url : ""); }
 

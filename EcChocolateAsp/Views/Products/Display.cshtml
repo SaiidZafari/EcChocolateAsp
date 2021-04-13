@@ -52,8 +52,8 @@
     </div>
     <div class="row">
         <div class="col border px-0">
-            <div class="row mx-0 mt-0 h5 bg-light border-bottom">
-                Description:
+            <div class="row mx-0 mt-0 h5 bg-light border-bottom pl-2">
+                Description
             </div>
             <div class="row m-1 px-1">
                 @Model.Product.Description
@@ -61,13 +61,6 @@
         </div>
     </div>
     <div class="row">
-        <partial name="_ReviewsSection" for="Reviews" />
+        <partial name="_ReviewsSection" />
     </div>
 </div>
-
-
-@*<script src="~/lib/bootstrap/dist/js/bootstrap.min.js" ></script>
-<script>
-    const carousel = document.querySelector(".carousel");
-    console.log(carousel);
-</script>*@

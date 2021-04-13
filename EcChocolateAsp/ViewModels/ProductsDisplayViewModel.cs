@@ -8,6 +8,6 @@ namespace EcChocolateAsp.Models
     public class ProductsDisplayViewModel
     {
         public Product Product { get; set; }
-        public IEnumerable<Review> Reviews { get; set; } = new List<Review>();
+        public ReviewsDto ReviewsDto { get; set; } = new ReviewsDto();
     }
 }
