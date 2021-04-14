@@ -13,7 +13,7 @@ namespace EcChocolateAsp.Extensions
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            // kommer ni ihåg JavaScript? = ) JSON.stringify()
+            
             session.SetString(key, JsonSerializer.Serialize(value));
         }
 
@@ -21,7 +21,7 @@ namespace EcChocolateAsp.Extensions
         {
             var value = session.GetString(key);
             Debug.WriteLine(value);
-            // kommer ni ihåg JavaScript? = ) JSON.parse()
+            
             return value == null ? default : JsonSerializer.Deserialize<T>(value);
         }
     }
