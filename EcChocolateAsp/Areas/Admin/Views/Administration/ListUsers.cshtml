@@ -1,7 +1,7 @@
-﻿@*@model IEnumerable<IdentityUser>
+﻿@model IEnumerable<IdentityUser>
+
 @{
-    ViewData["Title"] = "Registration";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "All Users";
 }
 
 <h1>All Users</h1>
@@ -15,7 +15,7 @@
 
     foreach (var user in Model)
     {
-        <div class="card mb-3">
+        <div class="card mb-3 w-75">
             <div class="card-header">
                 User Id : @user.Id
             </div>
@@ -23,7 +23,7 @@
                 <h5 class="card-title">@user.UserName</h5>
             </div>
             <div class="card-footer">
-                <a href="#" class="btn btn-info">Edit</a>
+                <a href="#" class="btn btn-primary">Edit</a>
                 <a href="#" class="btn btn-danger">Delete</a>
             </div>
         </div>
@@ -45,4 +45,4 @@ else
             </a>
         </div>
     </div>
-}*@
+}

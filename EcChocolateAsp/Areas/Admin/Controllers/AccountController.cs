@@ -46,7 +46,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index");
                 }
 
                 foreach (var error in result.Errors)
