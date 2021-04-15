@@ -11,7 +11,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
     [Area("Admin")]
     public class AdministrationController : Controller
     {
-        
+
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
 
@@ -28,6 +28,92 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
             var users = userManager.Users;
             return View(users);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {id} cannot found";
+                return View("NotFound");
+            }
+
+            var userClaims = await userManager.GetClaimsAsync(user);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                Claims = userClaims.Select(c => c.Value).ToList(),
+                Roles = (List<string>)userRoles
+            };
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.Id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {model.Id} cannot found";
+                return View("NotFound");
+            }
+            else
+            {
+                user.Email = model.Email;
+                user.UserName = model.UserName;
+
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.Errormessage = $"User with Id = {id} cannot found";
+                return View("NotFound");
+            }
+            else
+            {
+                var result = await userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View("ListUsers");
+            }
+        }
+
 
 
         [HttpGet]
@@ -51,7 +137,7 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ListRoles");
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -71,6 +157,79 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ManageUserRoles(string userId)
+        {
+            ViewBag.userId = userId;
+
+            var user = await userManager.FindByIdAsync(userId);
+            
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with id = {userId} cannot be found";
+                return View("Notfound");
+            }
+
+            var model = new List<UserRolesViewModel>();
+
+            foreach (var role in roleManager.Roles)
+            {
+                var userRolesViewModel = new UserRolesViewModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+
+                //if (await userManager.IsInRoleAsync(user,role.Name))
+                //{
+                    userRolesViewModel.IsSelected = true;
+                //}
+                //else
+                //{
+                //    userRolesViewModel.IsSelected = false;
+                //}
+
+                model.Add(userRolesViewModel);
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with id = {userId} cannot be found";
+                return View("Notfound");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            var result = await userManager.RemoveFromRolesAsync(user, roles);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing roles");
+                return View(model);
+            }
+
+            result = await userManager.AddToRolesAsync(user, model.Where(x => x.IsSelected)
+                .Select(y => y.RoleName));
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing roles");
+                return View(model);
+            }
+            return RedirectToAction("EditUser", new { Id = userId });
+        }
+
+
+
+
+            [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -80,15 +239,22 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 ViewBag.ErrorMessage = $"Role with id = {id} cannot be found";
                 return View("Notfound");
             }
+
             var model = new EditRoleViewModel
             {
                 Id = role.Id,
                 RoleName = role.Name
             };
 
+            //reader.Close();
+
+
             foreach (var user in userManager.Users)
             {
-                if (await userManager.IsInRoleAsync(user, role.Name))
+                //var temp = await userManager.IsInRoleAsync(user, role.Name);
+                // if (await userManager.GetUserIdAsync(user) == user.Id)
+
+                if (await userManager.GetUserIdAsync(user) == user.Id)
                 {
                     model.Users.Add(user.UserName);
                 }
@@ -124,15 +290,46 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 }
 
                 return View(model);
-            }            
+            }
         }
+
+        //----------------------------------------------------------------------
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+
+            if (role == null)
+            {
+                ViewBag.Errormessage = $"User with Id = {id} cannot found";
+                return View("NotFound");
+            }
+            else
+            {
+                var result = await roleManager.DeleteAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListRoles");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View("ListRoles");
+            }
+        }
+
+        //----------------------------------------------------------------------
+
 
 
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
-            
+
             var role = await roleManager.FindByIdAsync(roleId);
 
             if (role == null)
@@ -152,7 +349,9 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                     UserName = user.UserName
                 };
 
-                if (await userManager.IsInRoleAsync(user, role.Name))
+               
+
+                if (await userManager.GetUserIdAsync(user) == user.Id )
                 {
                     userRoleViewModel.IsSelected = true;
                 }
@@ -160,6 +359,17 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                 {
                     userRoleViewModel.IsSelected = false;
                 }
+
+                //if (await userManager.IsInRoleAsync(user, role.Name))
+                //{
+                //    userRoleViewModel.IsSelected = true;
+                //}
+                //else
+                //{
+                //    userRoleViewModel.IsSelected = false;
+                //}
+
+                //userRoleViewModel.IsSelected = await userManager.IsInRoleAsync(user, role.Name);
 
                 model.Add(userRoleViewModel);
             }
@@ -209,8 +419,8 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
                     {
                         return RedirectToAction("EditRole", new { Id = roleId });
                     }
-                            
-                    
+
+
                 }
             }
 

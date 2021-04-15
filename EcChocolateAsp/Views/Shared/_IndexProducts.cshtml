@@ -1,23 +1,28 @@
-﻿<div class="" id="divMF">
+﻿@model EcChocolateAsp.Models.ProductsDisplayViewModel
+@{
+
+}
+@*@Model.Product.Images*@
+<div class="" id="divMF">
 
     <div class="col-sm-4">
         <figure class="figFrame">
             <img id="image1" src="/images/ice1.jpg" alt="leftImage">
         </figure>
-        <a class="text-dark text-decoration-none" id="a1" href="/product.html?id=4">Beiers Ice Cream Cake</a>
+        <a class="text-dark text-decoration-none" id="a1" asp-controller="Products" asp-action="beiers-ice-cream-cake">Beiers Ice Cream Cake</a>
     </div>
     <div class="col-sm-4">
         <figure class="figFrame">
             <img id="image2" src="/images/ice2.jpg" alt="midleImage">
         </figure>
-        <a class="text-dark text-decoration-none" id="a2" href="/product.html?id=5">Lemon Pie Ice Cream Cake</a>
+        <a class="text-dark text-decoration-none" id="a2" asp-controller="Products" asp-action="lemon-pie-ice-cream-cake">Lemon Pie Ice Cream Cake</a>
     </div>
     <div class="col-sm-4">
         <figure class="figFrame">
             <img id="image3" src="/images/classicicecreamcake.jpg" alt="rightImage">
         </figure>
-      
-        <a class="text-dark text-decoration-none" id="a3" href="/product.html?id=6">Clasisk Ice Cream Cake</a>
+
+        <a class="text-dark text-decoration-none" id="a3" asp-controller="Products" asp-action="classic-ice-cream-cake">Clasisk Ice Cream Cake</a>
     </div>
 
 </div>
