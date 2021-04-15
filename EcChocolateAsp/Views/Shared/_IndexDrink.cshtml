@@ -1,0 +1,28 @@
+﻿@model EcChocolateAsp.Models.ProductsDisplayViewModel
+@{
+
+}
+@*@Model.Product.Images*@
+<div class="" id="divMF">
+
+    <div class="col-sm-4">
+        <figure class="figFrame">
+            <img id="image1" src="/images/juice.jpg" alt="leftImage">
+        </figure>
+        <a class="text-dark text-decoration-none" id="a1" asp-controller="Products" asp-action="juice">Juice</a>
+    </div>
+    <div class="col-sm-4">
+        <figure class="figFrame">
+            <img id="image2" src="/images/limonade.jpg" alt="midleImage">
+        </figure>
+        <a class="text-dark text-decoration-none" id="a2" asp-controller="Products" asp-action="limonade">Limonade</a>
+    </div>
+    <div class="col-sm-4">
+        <figure class="figFrame">
+            <img id="image3" src="/images/orange.jpg" alt="rightImage">
+        </figure>
+
+        <a class="text-dark text-decoration-none" id="a3" asp-controller="Products" asp-action="orange">Orange</a>
+    </div>
+
+</div>

@@ -31,7 +31,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ArrangementPrice" class="control-label"></label>
-                <input asp-for="ArrangementPrice" class="form-control" />
+                <select class="form-control" asp-for="ArrangementPrice">
+                    <option value="">Select Option...</option>
+                    <option value="450">AFTERNOON TEA 450 Kr</option>
+                    <option value="249">CHOKOLADE TAPAS 249 Kr</option>
+                    <option value="149">CHOKOLADEB RUNCH 149 Kr</option>
+                </select>
                 <span asp-validation-for="ArrangementPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
