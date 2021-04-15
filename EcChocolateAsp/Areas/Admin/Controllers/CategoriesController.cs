@@ -60,7 +60,6 @@ namespace EcChocolateAsp.Areas.Admin.Controllers
 
                 Category newCategory = new Category(viewModel.Name);
 
-                // TODO should we also choose products for this caetgory on create?
                 context.Add(newCategory);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

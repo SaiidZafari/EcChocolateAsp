@@ -29,6 +29,7 @@
         @foreach (var product in Model.Products)
         {
             @*<a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">*@
+
                 <div class="col-md-4 mt-2">
                     <div class="card">
                         <form asp-route="AddToFavorite" method="post">

@@ -9,7 +9,7 @@
     <div class="row">
         @foreach (var product in Model)
         {
-            <a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">
+            @*<a asp-route="productsdisplay" asp-route-urlSlug="@product.Name">*@
                 <div class="col-md-4 mt-2">
                     <div class="card">
                         <form asp-route="AddToFavorite" method="post">
@@ -19,7 +19,7 @@
                             <input type="hidden" name="productId" value="@product.Id" />
                             <div class="card-body bg-light text-center">
                                 <div class="mb-2">
-                                    <h6 class="font-weight-semibold mb-2"> <a href="#" class="text-default mb-2" data-abc="true">@product.Name</a> </h6>
+                                    <h6 class="font-weight-semibold mb-2"> <a asp-controller="Products" asp-action="@product.Name.Slugify()" class="text-default mb-2" data-abc="true">@product.Name</a> </h6>
                                 </div>
                                 <h3 class="mb-0 font-weight-semibold">@product.Price</h3>
                                 <button class="btn bg-cart"><i class="fa fa-star mr-2"></i> Add to favorite</button>
@@ -27,7 +27,7 @@
                         </form>
                     </div>
                 </div>
-            </a>
+            @*</a>*@
         }
     </div>
 </div>
